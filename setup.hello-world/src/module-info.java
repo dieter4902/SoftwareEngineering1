@@ -1,0 +1,2 @@
+module setup.hello.world {
+}
