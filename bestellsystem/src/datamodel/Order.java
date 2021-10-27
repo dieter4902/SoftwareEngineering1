@@ -1,6 +1,8 @@
 package datamodel;
 
+import java.time.Instant;
 import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * Class for entity type Order. Order represents a contractual relation between
@@ -12,44 +14,42 @@ import java.util.*;
  */
 public class Order {
 
-	/**
-	 * Default constructor
-	 */
-	public Order() {}
-
-	/**
-	 * id attribute, null: invalid, can be set only once
-	 */
-	private String id = null;
-
-	/**
-	 * reference to owning Customer, final, is never null
-	 */
-	//private final Customer customer;
-
-	/**
-	 * date/time order was created
-	 */
-	//private final Date creationDate;
-
-	/**
-	 * items ordered as part of this order
-	 */
-	//private final List<OrderItem> items;
 
     /**
-     * The Owns.
+     * id attribute, null: invalid, can be set only once
      */
-    public Customer owns;
+    private String id = null;
+
+    /**
+     * reference to owning Customer, final, is never null
+     */
+    private final Customer customer;
+
+    /**
+     * date/time order was created
+     */
+    private final Date creationDate;
+
+    /**
+     * items ordered as part of this order
+     */
+    private final List<OrderItem> items;
+
 
     /**
      * Constructor with customer owning the order as argument.
      *
      * @param customer owner of order, customer who placed that order, throws                 IllegalArgumentException if customer is null
      */
-    public void Order(Customer customer) {
-		// TODO implement here
-	}
+    public Order(Customer customer) {
+        if (customer == null) {
+            throw new IllegalArgumentException("customer is null");
+        } else {
+            this.customer = customer;
+        }
+        creationDate = Date.from(Instant.now());
+        items = new ArrayList<>();
+    }
 
     /**
      * Id getter. Id can only be set once since id are immutable after assignment.
@@ -57,9 +57,8 @@ public class Order {
      * @return order id, may be invalid (null) if id is still unassigned
      */
     public String getId() {
-		// TODO implement here
-		return "";
-	}
+        return id;
+    }
 
     /**
      * Id setter. Id can only be set once since id is immutable after assignment.
@@ -68,9 +67,11 @@ public class Order {
      * @return chainable self-reference
      */
     public Order setId(String id) {
-		// TODO implement here
-		return null;
-	}
+        if (this.id == null && id != null && !id.equals("")) {
+            this.id = id;
+        }
+        return this;
+    }
 
     /**
      * customer getter.
@@ -78,9 +79,8 @@ public class Order {
      * @return customer who owns the order, cannot be null
      */
     public Customer getCustomer() {
-		// TODO implement here
-		return null;
-	}
+        return customer;
+    }
 
     /**
      * creationDate getter, returns the time/date when the oder was created.
@@ -88,9 +88,8 @@ public class Order {
      * @return time /date when order was created
      */
     public Date getCreationDate() {
-		// TODO implement here
-		return null;
-	}
+        return creationDate;
+    }
 
     /**
      * creationDate setter.
@@ -99,9 +98,9 @@ public class Order {
      * @return chainable self-reference
      */
     public Order setCreationDate(long dateAsLong) {
-		// TODO implement here
-		return null;
-	}
+        creationDate.setTime(dateAsLong);
+        return this;
+    }
 
     /**
      * Return number of items that are part of the order.
@@ -109,9 +108,8 @@ public class Order {
      * @return number of ordered items
      */
     public int itemsCount() {
-		// TODO implement here
-		return 0;
-	}
+        return items.size();
+    }
 
     /**
      * Ordered items getter (as {@code Iterable<OrderItem>}).
@@ -119,9 +117,8 @@ public class Order {
      * @return ordered items as {@code Iterable<OrderItem>}
      */
     public Iterable<OrderItem> getItems() {
-		// TODO implement here
-		return null;
-	}
+        return items;
+    }
 
     /**
      * Ordered items getter (as {@code OrderItem[]}).
@@ -129,19 +126,17 @@ public class Order {
      * @return ordered items as {@code OrderItem[]}
      */
     public OrderItem[] getItemsAsArray() {
-		// TODO implement here
-		return null;
-	}
+        return items.toArray(OrderItem[]::new);
+    }
 
-	/**
-	 * Ordered items getter (as {@code Stream<OrderItem>}).
-	 *
-	 * @return ordered items as {@code Stream<OrderItem>}
-	 */
-	//public Stream<OrderItem> getItemsAsStream() {
-		// TODO implement here
-	//	return null;
-	//}
+    /**
+     * Ordered items getter (as {@code Stream<OrderItem>}).
+     *
+     * @return ordered items as {@code Stream<OrderItem>}
+     */
+    public Stream<OrderItem> getItemsAsStream() {
+        return items.stream();
+    }
 
     /**
      * Create new item and add to order.
@@ -151,9 +146,11 @@ public class Order {
      * @return chainable self-reference
      */
     public Order addItem(Article article, int units) {
-		// TODO implement here
-		return null;
-	}
+        if (article != null) {
+            items.add(new OrderItem(article, units));
+        }
+        return this;
+    }
 
     /**
      * Delete i-th item with constraint: {@code i >= 0 && i < items.size()},
@@ -162,14 +159,16 @@ public class Order {
      * @param i index in order items
      */
     public void deleteItem(int i) {
-		// TODO implement here
-	}
+        if (i >= 0 && i < items.size()) {
+            items.remove(i);
+        }
+    }
 
     /**
      * Delete all ordered items.
      */
     public void deleteAllItems() {
-		// TODO implement here
-	}
+        items.clear();
+    }
 
 }

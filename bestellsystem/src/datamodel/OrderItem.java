@@ -1,7 +1,5 @@
 package datamodel;
 
-import java.util.*;
-
 /**
  * Class that describes an ordered item as part of an Order. Orders may have
  * multiple order items.
@@ -12,15 +10,15 @@ import java.util.*;
  */
 public class OrderItem {
 
-	/**
-	 * ordered article, immutable, final
-	 */
-	//private final Article article;
+    /**
+     * ordered article, immutable, final
+     */
+    private final Article article;
 
-	/**
-	 * number of articles ordered
-	 */
-	private int unitsOrdered;
+    /**
+     * number of articles ordered
+     */
+    private int unitsOrdered;
 
     /**
      * Constructor with article and units arguments.
@@ -28,9 +26,14 @@ public class OrderItem {
      * @param article      ordered article, throws IllegalArgumentException if                     article is null
      * @param unitsOrdered number of articles ordered
      */
-    public void OrderItem(Article article, int unitsOrdered) {
-		// TODO implement here
-	}
+    public OrderItem(Article article, int unitsOrdered) {
+        if (article == null) {
+            throw new IllegalArgumentException("article has to be not null");
+        } else {
+            this.article = article;
+        }
+        this.unitsOrdered = unitsOrdered;
+    }
 
     /**
      * article getter. Attribute article cannot be changed has therefore has no
@@ -39,9 +42,8 @@ public class OrderItem {
      * @return reference to the ordered article
      */
     public Article getArticle() {
-		// TODO implement here
-		return null;
-	}
+        return article;
+    }
 
     /**
      * unitsOrdered getter.
@@ -49,9 +51,8 @@ public class OrderItem {
      * @return number of article ordered
      */
     public int getUnitsOrdered() {
-		// TODO implement here
-		return 0;
-	}
+        return unitsOrdered;
+    }
 
     /**
      * unitsOrdered setter with constraint: {@code units >= 0}, otherwise the method
@@ -60,7 +61,9 @@ public class OrderItem {
      * @param units updated number of articles ordered
      */
     public void setUnitsOrdered(int units) {
-		// TODO implement here
-	}
+        if (units >= 0) {
+            unitsOrdered = units;
+        }
+    }
 
 }

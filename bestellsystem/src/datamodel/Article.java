@@ -12,12 +12,6 @@ import java.util.*;
 public class Article {
 
     /**
-     * Default constructor
-     */
-    public Article() {
-    }
-
-    /**
      * id attribute, null: invalid, can be set only once
      */
     private String id = null;
@@ -46,8 +40,7 @@ public class Article {
     /**
      * Default constructor.
      */
-    public void Article() {
-        // TODO implement here
+    public Article() {
     }
 
     /**
@@ -56,8 +49,9 @@ public class Article {
      * @param descr     descriptive text for article
      * @param unitPrice unitPrice price (in cent) for one unit of the article
      */
-    public void Article(String descr, long unitPrice) {
-        // TODO implement here
+    public Article(String descr, long unitPrice) {
+        setDescription(descr);
+        setUnitPrice(unitPrice);
     }
 
     /**
@@ -66,8 +60,7 @@ public class Article {
      * @return article id, may be invalid (null) if still unassigned
      */
     public String getId() {
-        // TODO implement here
-        return "";
+        return id;
     }
 
     /**
@@ -77,8 +70,10 @@ public class Article {
      * @return chainable self-reference
      */
     public Article setId(String id) {
-        // TODO implement here
-        return null;
+        if (this.id == null && id != null && !id.equals("")) {
+            this.id = id;
+        }
+        return this;
     }
 
     /**
@@ -87,8 +82,7 @@ public class Article {
      * @return descriptive text for article
      */
     public String getDescription() {
-        // TODO implement here
-        return "";
+        return description;
     }
 
     /**
@@ -98,8 +92,10 @@ public class Article {
      * @return chainable self-reference
      */
     public Article setDescription(String descr) {
-        // TODO implement here
-        return null;
+        if (descr != null) {
+            description = descr;
+        }
+        return this;
     }
 
     /**
@@ -108,8 +104,7 @@ public class Article {
      * @return price in cent for one article unit
      */
     public long getUnitPrice() {
-        // TODO implement here
-        return 0;
+        return unitPrice;
     }
 
     /**
@@ -119,8 +114,10 @@ public class Article {
      * @return chainable self-reference
      */
     public Article setUnitPrice(long unitPrice) {
-        // TODO implement here
-        return null;
+        if (unitPrice >= 0) {
+            this.unitPrice = unitPrice;
+        }
+        return this;
     }
 
     /**
@@ -129,8 +126,7 @@ public class Article {
      * @return currency in which unitPrice is quoted
      */
     public Currency getCurrency() {
-        // TODO implement here
-        return null;
+        return currency;
     }
 
     /**
@@ -140,8 +136,10 @@ public class Article {
      * @return chainable self-reference
      */
     public Article setCurrency(Currency currency) {
-        // TODO implement here
-        return null;
+        if (currency != null) {
+            this.currency = currency;
+        }
+        return this;
     }
 
     /**
@@ -150,8 +148,7 @@ public class Article {
      * @return tax rate applicable for article
      */
     public TAX getTax() {
-        // TODO implement here
-        return null;
+        return tax;
     }
 
     /**
@@ -161,8 +158,10 @@ public class Article {
      * @return chainable self-reference
      */
     public Article setTax(TAX tax) {
-        // TODO implement here
-        return null;
+        if (tax != null) {
+            this.tax = tax;
+        }
+        return this;
     }
 
 }

@@ -1,33 +1,81 @@
 package datamodel;
 
+
 /**
  * Type to enumerate currencies.
  * <p>
- * Currency is the unit in which price information is expressed.
+ * Currency is the unit in which price information is quoted.
  *
  * @author AJ
  * @version {@value package_info#Version}
- * @since 1.0
+ * @since "0.1.0"
  */
+
 public enum Currency {
+
     /**
-     * Eur currency.
+     * Currency units used in the system: EUR, USD, GBP, YEN
      */
-    EUR,
+
     /**
-     * Usd currency.
+     * Euro, legal tender in many countries in the European Union
      */
-    USD,
+    EUR("\u20AC"),
+
     /**
-     * Gbp currency.
+     * US Dollar, legal tender in the United States of America
      */
-    GBP,
+    USD("$"),
+
     /**
-     * Yen currency.
+     * Great Britain Pound (or Pound Sterling), legal tender in the United Kingdom
      */
-    YEN,
+    GBP("\u00A3"),
+
     /**
-     * None currency.
+     * Japanese Yen, legal tender in Japan
      */
-    NONE
+    YEN("\u00A5"),
+
+    /**
+     * represents an undefined currency
+     */
+    NONE(" ");
+
+    /**
+     * not used: PLN("z\u0142"), CZK("K\u010D")
+     * source: https://www.ip2currency.com/currency-symbol
+     */
+
+
+    /**
+     * UNICODE symbol for currency, e.g. "\u20AC" for EURO
+     */
+    private final String symbol;
+
+
+    /**
+     * Constructor taking UNICODE symbol as argument.
+     *
+     * @param s UNICODE symbol for currency
+     */
+    Currency(String s) {
+        symbol = s;
+    }
+
+    /**
+     * Method to return currency symbol padded to width.
+     *
+     * @param width variable argument (vararg) length/width of padded symbol
+     * @return width-padded String with currency UNICODE
+     */
+    public String symbol(Integer... width) {
+        int w = width.length > 0 ? width[0] : 1;    // 1 is default width
+        String padded = this == NONE || w == 0 ? "" : symbol;
+        if (w > 1) {
+            padded = padded + " ".repeat(w);    // pad left-aligned, "€  "
+        }
+        return padded;
+    }
+
 }
