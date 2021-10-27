@@ -10,7 +10,7 @@
  * package-info.java - provides Javadoc information for a package.
  * 
  * @since 1.0
- * @version {@value package_info#Version}
+ * @version {@value datamodel.package_info#Version}
  * @author AJ
  */
 

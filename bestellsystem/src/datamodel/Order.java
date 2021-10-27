@@ -15,7 +15,7 @@ public class Order {
 	/**
 	 * Default constructor
 	 */
-	// public Order() {}
+	public Order() {}
 
 	/**
 	 * id attribute, null: invalid, can be set only once
