@@ -1,7 +1,7 @@
 package application;
 
 import java.util.List;
-import datamodel.Customer;
+import datamodel.*;
 
 /**
  * Class with Customer objects and main() function.

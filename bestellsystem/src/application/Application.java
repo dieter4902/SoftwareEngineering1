@@ -1,7 +1,4 @@
 package application;
-
-import datamodel.Customer;
-
 /**
  * The type Application.
  */
