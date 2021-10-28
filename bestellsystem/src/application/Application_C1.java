@@ -218,22 +218,14 @@ public class Application_C1 {
             if (flag) {
                 flag = false;
 
-                int count = 1;
-                for (Order o : orders.subList(0, orders.indexOf(order))) {
-                    if (o.getCustomer().equals(order.getCustomer())) {
-                        count++;
-                    }
-                }
-
-                otfmt.line(order.getId(), order.getCustomer().getFirstName() + "'s " + (getOrderSuffix(count)) + "order:", e.toString(), price, vat);
+                otfmt.line(order.getId(), getOrderSuffix(order), e.toString(), price, vat);
             } else {
                 otfmt.line("", "", e.toString(), price, vat);
             }
             totalPrice += price;
             totalVat += vat;
         }
-        otfmt
-                .liner("| | |-|-|-|")
+        otfmt.liner("| | |-|-|-|")
                 .line("", "", "total:", totalPrice, totalVat)
                 .liner("| | | |=|=|")
                 .liner("| | | | | |");
@@ -242,17 +234,29 @@ public class Application_C1 {
         return prices;
     }
 
-    String getOrderSuffix(final int n) {
-        switch (n) {
-            case 0, 1:
-                return "";
-            case 2:
-                return n + "nd ";
-            case 3:
-                return n + "rd ";
-            default:
-                return n + "th ";
+    String getOrderSuffix(Order order) {
+        int count = 1;
+        for (Order o : orders.subList(0, orders.indexOf(order))) { //macht eine liste von den vorherabgelaufenen orders, der aktuellen order nicht inbegriffen
+            if (o.getCustomer().equals(order.getCustomer())) {
+                count++;
+            }
         }
+        String s = order.getCustomer().getFirstName() + "'s ";
+        switch (count) {
+            case 0, 1://do nothing
+                break;
+            case 2:
+                s += count + "nd ";
+                break;
+            case 3:
+                s += count + "rd ";
+                break;
+            default:
+                s += count + "th ";
+                break;
+        }
+        s += "order:";
+        return s;
     }
 
     /**
