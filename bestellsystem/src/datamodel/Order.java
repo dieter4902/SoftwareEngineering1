@@ -146,7 +146,9 @@ public class Order {
      * @return chainable self-reference
      */
     public Order addItem(Article article, int units) {
-        if (article != null) {
+        if (article == null) {
+            throw new IllegalArgumentException("article was null");
+        } else {
             items.add(new OrderItem(article, units));
         }
         return this;

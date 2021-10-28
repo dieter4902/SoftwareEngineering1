@@ -66,4 +66,15 @@ public class OrderItem {
         }
     }
 
+    /**
+     * toString method that returns the details of the order in a better string
+     *
+     * @return amount of x item with the total price and correct currency
+     */
+    public String toString() {
+        return unitsOrdered + " " + getArticle().getDescription() + " " + getArticle().getId() + ", " +
+                (unitsOrdered == 1 ? "" : unitsOrdered + "x") + " " + (double) getArticle().getUnitPrice() / 100 + getArticle().getCurrency().symbol();
+
+    }
+
 }
