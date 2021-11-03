@@ -120,25 +120,25 @@ public class Application_C1 {
                 .addItem(buch_OOP, 1);
         //
         // Eric's 3rd order
-        Order o8462 = new Order(eric)
+        Order o7356 = new Order(eric)
                 .setId("7356613535")
                 .addItem(fahrradhelm, 1)
                 .addItem(fahrradkarte, 1);
         //
         // Eric's 4th order
-        Order o2934 = new Order(eric)
+        Order o4450 = new Order(eric)
                 .setId("4450735661")
                 .addItem(tasse, 3)
                 .addItem(becher, 3)
                 .addItem(kanne, 1);
         //
-        // Eric's 2nd order
-        Order o1325 = new Order(lena)
-                .setId("5234968294")
+        // Lena's order
+        Order o6173 = new Order(lena)
+                .setId("6173535635")
                 .addItem(buch_Java, 1)
                 .addItem(fahrradkarte, 1);
         //
-        this.orders = new ArrayList<>(List.of(o8592, o3563, o5234, o6135, o8462, o2934, o1325));
+        this.orders = new ArrayList<>(List.of(o8592, o3563, o5234, o6135, o7356, o4450, o6173));
     }
 
 
@@ -225,10 +225,15 @@ public class Application_C1 {
             totalPrice += price;
             totalVat += vat;
         }
-        otfmt.liner("| | |-|-|-|")
-                .line("", "", "total:", totalPrice, totalVat)
-                .liner("| | | |=|=|")
+        //totalPrice = calculateValue(order);
+        //totalVat = calculateIncludedVAT(order);
+        if (order.getItemsAsArray().length > 1) {
+            otfmt.liner("| | |-|-|-|")
+                    .line("", "", "total:", totalPrice, totalVat);
+        }
+        otfmt.liner("| | | |=|=|")
                 .liner("| | | | | |");
+
         prices[0] = totalPrice;
         prices[1] = totalVat;
         return prices;
