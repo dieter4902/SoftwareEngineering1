@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Paths;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +13,11 @@ import java.util.stream.StreamSupport;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import datamodel.Article;
 import datamodel.Currency;
 import datamodel.TAX;
@@ -36,7 +39,7 @@ public class Application_C3_jsondata {
      * @param args standard argument vector passed from command line
      */
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         System.out.println("SE1 Bestellsystem\n");
         //
         final Application_C3_jsondata app = new Application_C3_jsondata();
@@ -58,8 +61,16 @@ public class Application_C3_jsondata {
         sb.append("\\\\\nimported: ").append(articles.size()).append(" Article objects.");
         //
         System.out.println(sb);
-    }
 
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode customer = mapper.createObjectNode();
+
+        customer.put("id", 883899)
+                .put("name", "Breitmann, Arne")
+                .put("contacts", "arnie@gmx.de, breitmann@gmail.com");
+        mapper.writeValue(Paths.get("src/data/customer_10.json").toFile(),customer);
+
+    }
 
     /**
      * Import objects from file with JSON Array [ {obj1}, {obj2}, ... ]
@@ -71,7 +82,7 @@ public class Application_C3_jsondata {
 
     List<Article> readArticles(String jsonFileName, Integer... limit) {
         int lim = Math.max(limit.length > 0 ? limit[0].intValue() : Integer.MAX_VALUE, 0);
-        List<Article> articles = null;
+        List<Article> articles;
         try (
                 // auto-close on exception, InputStream implements the java.lang.AutoClosable interface
                 InputStream fis = new FileInputStream(jsonFileName);
