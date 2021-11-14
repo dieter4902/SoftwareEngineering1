@@ -208,10 +208,7 @@ public class Application_C1 {
 
         long[] prices = new long[2];
         boolean flag = true;
-        long price;
-        long vat;
-        long totalPrice = 0;
-        long totalVat = 0;
+        long price, vat, totalPrice = 0, totalVat = 0;
         for (OrderItem e : order.getItems()) {
             price = e.getUnitsOrdered() * e.getArticle().getUnitPrice();
             vat = calculateIncludedVAT(e.getArticle().getUnitPrice() * e.getUnitsOrdered(), e.getArticle().getTax());
@@ -225,15 +222,12 @@ public class Application_C1 {
             totalPrice += price;
             totalVat += vat;
         }
-        //totalPrice = calculateValue(order);
-        //totalVat = calculateIncludedVAT(order);
         if (order.getItemsAsArray().length > 1) {
             otfmt.liner("| | |-|-|-|")
                     .line("", "", "total:", totalPrice, totalVat);
         }
         otfmt.liner("| | | |=|=|")
                 .liner("| | | | | |");
-
         prices[0] = totalPrice;
         prices[1] = totalVat;
         return prices;

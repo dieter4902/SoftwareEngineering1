@@ -6,9 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Paths;
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.StreamSupport;
 import java.util.stream.Collectors;
 
@@ -20,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import datamodel.Article;
 import datamodel.Currency;
+import datamodel.Customer;
 import datamodel.TAX;
 
 
@@ -44,32 +43,44 @@ public class Application_C3_jsondata {
         //
         final Application_C3_jsondata app = new Application_C3_jsondata();
 
-        final String jsonFileName = "src/data/articles_9.json";
-        final int limit = 10000;    // limit number of objects imported from JSON
+        String jsonFileName = "src/data/articles_9.json";
+        final int limit = 100;    // limit number of objects imported from JSON
         //
         StringBuffer sb = new StringBuffer("from: " + jsonFileName + ":\n\\\\");
         //
         //sb.append( "\nJSON:\n" );
         //app.printJsonArrayfromFile( sb, jsonFileName, false, limit );
 
+
+
+        /*
         sb.append("\nList<Article>:\n");
         List<Article> articles = app.readArticles(jsonFileName, limit);
         articles.addAll(app.readArticles("src/data/articles_871.json", limit - articles.size()));
-        //
         articles.forEach(article -> app.print(sb, article, " --> "));
-        //
         sb.append("\\\\\nimported: ").append(articles.size()).append(" Article objects.");
-        //
+         */
+        sb.append("\n");
+
+        jsonFileName = "src/data/customer_10.json";
+        sb.append("from: " + jsonFileName + ":\n\\\\");
+
+        List<Customer> customers = app.readCustomers("src/data/customer_10.json")
+                .stream().sorted(Comparator.comparing(Customer::getLastName)).toList();
+
+        customers.forEach(customer -> app.print(sb, customer, " --> "));
+
+        sb.append("\\\\\nimported: ").append(customers.size()).append(" Customer objects.");
         System.out.println(sb);
 
+        /*
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode customer = mapper.createObjectNode();
-
         customer.put("id", 883899)
                 .put("name", "Breitmann, Arne")
                 .put("contacts", "arnie@gmx.de, breitmann@gmail.com");
-        mapper.writeValue(Paths.get("src/data/customer_10.json").toFile(),customer);
-
+        mapper.writeValue(Paths.get("src/data/customer_10.json").toFile(), customer);
+         */
     }
 
     /**
@@ -79,6 +90,66 @@ public class Application_C3_jsondata {
      * @param limit        maximum number of imported JSON objects (vararg)
      * @return List of Article objects imported from JSON file (up to limit)
      */
+
+
+    List<Customer> readCustomers(String jsonFileName, Integer... limit) {
+        int lim = Math.max(limit.length > 0 ? limit[0].intValue() : Integer.MAX_VALUE, 0);
+        List<Customer> customer;
+        try (InputStream fis = new FileInputStream(jsonFileName);) {
+            customer = StreamSupport
+                    .stream(new ObjectMapper().readTree(fis).spliterator(), false)
+                    .limit(lim)
+                    .map(jsonNode -> {
+                        Optional<Customer> article = createCustomer(jsonNode);
+                        if (article.isEmpty()) {
+                            System.out.println("dropping: " + jsonNode.toString());
+                        }
+                        return article;
+                    })
+                    .filter(a -> a.isPresent())
+                    .map(aOpt -> aOpt.get())
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            customer = new ArrayList<Customer>();    // return empty list
+            e.printStackTrace();
+        }
+        return customer;
+    }
+
+    Optional<Customer> createCustomer(JsonNode jsonNode) {
+        try {
+            long id = Long.parseLong(valueAsString(jsonNode, "id", true));
+            String name = valueAsString(jsonNode, "name", true);
+            String[] contacts = valueAsString(jsonNode, "contacts", false).split(",");
+
+            if (validCustomerAttrs(id, name, contacts)) {
+                Customer customer = new Customer()
+                        .setId(id)
+                        .setName(name);
+
+                for (String contact : contacts) {
+                    customer.addContact(contact);
+                }
+
+                return Optional.of(customer);
+            }
+
+        } catch (InvalidParameterException ipex) {
+            System.err.println("AttributeNotFoundException, " + ipex.getMessage() + " in: " + jsonNode.toString());
+
+        } catch (NumberFormatException nex) {
+            System.err.println("NumberFormatException in: " + jsonNode.toString());
+
+        } catch (NullPointerException npex) {
+            System.err.println(npex.getClass().getSimpleName() + " in: " + jsonNode.toString());
+
+        } catch (Exception ex) {
+            System.err.println(ex.getClass().getSimpleName() + " in: " + jsonNode.toString());
+        }
+
+        return Optional.empty();
+    }
+
 
     List<Article> readArticles(String jsonFileName, Integer... limit) {
         int lim = Math.max(limit.length > 0 ? limit[0].intValue() : Integer.MAX_VALUE, 0);
@@ -229,6 +300,14 @@ public class Application_C3_jsondata {
         return valid;
     }
 
+    boolean validCustomerAttrs(long id, String name, String[] contacts) {
+        boolean valid = true;
+        valid = valid && id > 0;
+        valid = valid && name != null && name.length() > 0;
+        valid = valid && contacts != null;
+        return valid;
+    }
+
 
     /**
      * Print content of JSON Array file: [ {...}, {...}, ... ]
@@ -268,6 +347,16 @@ public class Application_C3_jsondata {
             e.printStackTrace();
         }
         return sb_;
+    }
+
+
+    StringBuffer print(StringBuffer sb, Customer customer, String... prefix) {
+        return (sb != null ? sb : new StringBuffer())
+                .append(prefix.length > 0 ? prefix[0] : "")
+                .append(customer.getId()).append(", ")
+                .append(fmtPaddedText(new StringBuffer(), customer.getName(), 36, '[', ".."))
+                .append(fmtPaddedText(new StringBuffer(), Arrays.toString(customer.getContacts()), 60, '[', ".."))
+                .append("\n");
     }
 
 
