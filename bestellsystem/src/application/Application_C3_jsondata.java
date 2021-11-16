@@ -48,19 +48,17 @@ public class Application_C3_jsondata {
         //
         StringBuffer sb = new StringBuffer("from: " + jsonFileName + ":\n\\\\");
         //
-        //sb.append( "\nJSON:\n" );
-        //app.printJsonArrayfromFile( sb, jsonFileName, false, limit );
-
-
-
-        /*
+        sb.append("\nJSON:\n");
+        app.printJsonArrayfromFile(sb, jsonFileName, false, limit);
         sb.append("\nList<Article>:\n");
         List<Article> articles = app.readArticles(jsonFileName, limit);
-        articles.addAll(app.readArticles("src/data/articles_871.json", limit - articles.size()));
+
+        jsonFileName = "src/data/articles_871.json";
+
+        articles.addAll(app.readArticles(jsonFileName, limit - articles.size()));
         articles.forEach(article -> app.print(sb, article, " --> "));
         sb.append("\\\\\nimported: ").append(articles.size()).append(" Article objects.");
-         */
-        sb.append("\n");
+
 
         jsonFileName = "src/data/customer_10.json";
         sb.append("from: " + jsonFileName + ":\n\\\\");
@@ -72,15 +70,6 @@ public class Application_C3_jsondata {
 
         sb.append("\\\\\nimported: ").append(customers.size()).append(" Customer objects.");
         System.out.println(sb);
-
-        /*
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode customer = mapper.createObjectNode();
-        customer.put("id", 883899)
-                .put("name", "Breitmann, Arne")
-                .put("contacts", "arnie@gmx.de, breitmann@gmail.com");
-        mapper.writeValue(Paths.get("src/data/customer_10.json").toFile(), customer);
-         */
     }
 
     /**
