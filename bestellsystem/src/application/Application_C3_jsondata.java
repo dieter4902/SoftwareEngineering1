@@ -38,7 +38,7 @@ public class Application_C3_jsondata {
      * @param args standard argument vector passed from command line
      */
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         System.out.println("SE1 Bestellsystem\n");
         //
         final Application_C3_jsondata app = new Application_C3_jsondata();
