@@ -78,7 +78,6 @@ public class OrderBuilder {
     /**
      * Build and save orders to OrderRepository.
      *
-     * @param order saved to OrderRepository
      * @return chainable self-reference
      */
     public OrderBuilder build() {
