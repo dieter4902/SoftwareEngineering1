@@ -14,7 +14,6 @@ class PrinterImpl implements Printer {
     Calculator calc;
     private long totalAllOrders;
     private long totalVAT;
-    Formatter.OrderTableFormatter otfmt;
     HashMap<Long, Integer> customerCount;
     Formatter formatter;
 
@@ -29,7 +28,7 @@ class PrinterImpl implements Printer {
     @Override
     public StringBuffer printOrders(Iterable<Order> orders) {
 
-        otfmt = new OrderTableFormatterImpl(formatter, new Object[][]{
+        Formatter.OrderTableFormatter otfmt = new OrderTableFormatterImpl(createFormatter(), new Object[][]{
                 // five column table with column specs: width and alignment ('[' left, ']' right)
                 {12, '['}, {20, '['}, {36, '['}, {10, ']'}, {10, ']'}
         })
@@ -41,15 +40,27 @@ class PrinterImpl implements Printer {
 
 
         StringBuffer sb = new StringBuffer();
+        sb.append(otfmt.getFormatter().getBuffer());
         for (Order e : orders) {
             sb.append(printOrder(e));
+
         }
+        otfmt = new OrderTableFormatterImpl(createFormatter(), new Object[][]{
+                // five column table with column specs: width and alignment ('[' left, ']' right)
+                {12, '['}, {20, '['}, {36, '['}, {10, ']'}, {10, ']'}
+        });
         otfmt.lineTotal(totalAllOrders, totalVAT, Currency.EUR);
         return sb.append(otfmt.getFormatter().getBuffer());
     }
 
     @Override
     public StringBuffer printOrder(Order order) {
+
+        Formatter.OrderTableFormatter otfmt = new OrderTableFormatterImpl(createFormatter(), new Object[][]{
+                // five column table with column specs: width and alignment ('[' left, ']' right)
+                {12, '['}, {20, '['}, {36, '['}, {10, ']'}, {10, ']'}
+        });
+
         boolean flag = true;
         long price, vat, totalPrice = 0, totalVat = 0;
         for (OrderItem e : order.getItems()) {
@@ -73,7 +84,6 @@ class PrinterImpl implements Printer {
                 .liner("| | | | | |");
         totalAllOrders += totalPrice;
         totalVAT += totalVat;
-
         return otfmt.getFormatter().getBuffer();
 
     }

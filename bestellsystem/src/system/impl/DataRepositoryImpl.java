@@ -5,6 +5,7 @@ import datamodel.Customer;
 import datamodel.Order;
 import system.DataRepository;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 class DataRepositoryImpl implements DataRepository {
@@ -13,6 +14,11 @@ class DataRepositoryImpl implements DataRepository {
     ArticleRepository aRep;
     OrderRepository oRep;
 
+    public DataRepositoryImpl() {
+        cRep = new CustomerRepositoryImpl();
+        aRep = new ArticleRepositoryImpl();
+        oRep = new OrderRepositoryImpl();
+    }
 
     public CustomerRepository getCustomerRepository() {
         return cRep;
@@ -28,70 +34,93 @@ class DataRepositoryImpl implements DataRepository {
 
     class CustomerRepositoryImpl implements CustomerRepository {
 
+        private HashMap<Long, Customer> CustomerList;
+
+        public CustomerRepositoryImpl() {
+            CustomerList = new HashMap<>();
+        }
+
         @Override
         public Optional<Customer> findById(long id) {
-            return Optional.empty();
+            Customer c = CustomerList.get(id);
+            return c == null ? Optional.empty() : Optional.of(c);
         }
 
         @Override
         public Iterable<Customer> findAll() {
-            return null;
+            return CustomerList.values();
         }
 
         @Override
         public long count() {
-            return 0;
+            return CustomerList.size();
         }
 
         @Override
         public Customer save(Customer entity) {
-            return null;
+            CustomerList.putIfAbsent(entity.getId(), entity);
+            return entity;
         }
     }
 
     class ArticleRepositoryImpl implements ArticleRepository {
+        private HashMap<String, Article> ArticleList;
+
+        public ArticleRepositoryImpl() {
+            ArticleList = new HashMap<>();
+        }
 
         @Override
         public Optional<Article> findById(String id) {
-            return Optional.empty();
+            Article a = ArticleList.get(id);
+            return a == null ? Optional.empty() : Optional.of(a);
         }
 
         @Override
         public Iterable<Article> findAll() {
-            return null;
+            return ArticleList.values();
         }
 
         @Override
         public long count() {
-            return 0;
+            return ArticleList.size();
         }
 
         @Override
         public Article save(Article entity) {
-            return null;
+            ArticleList.putIfAbsent(entity.getId(), entity);
+            return entity;
         }
     }
 
     class OrderRepositoryImpl implements OrderRepository {
 
+        private HashMap<String, Order> OrderList;
+
+        public OrderRepositoryImpl() {
+            OrderList = new HashMap<>();
+        }
+
         @Override
         public Optional<Order> findById(String id) {
-            return Optional.empty();
+            Order o = OrderList.get(id);
+            return o == null ? Optional.empty() : Optional.of(o);
         }
 
         @Override
         public Iterable<Order> findAll() {
-            return null;
+            return OrderList.values();
         }
 
         @Override
         public long count() {
-            return 0;
+            return OrderList.size();
         }
 
         @Override
         public Order save(Order entity) {
-            return null;
+            OrderList.putIfAbsent(entity.getId(), entity);
+            return entity;
         }
     }
 }
