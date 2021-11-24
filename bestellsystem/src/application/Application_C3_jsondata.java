@@ -44,7 +44,7 @@ public class Application_C3_jsondata {
         final Application_C3_jsondata app = new Application_C3_jsondata();
 
         String jsonFileName = "src/data/articles_9.json";
-        final int limit = 100;    // limit number of objects imported from JSON
+        final int limit = 20;    // limit number of objects imported from JSON
         //
         StringBuffer sb = new StringBuffer("from: " + jsonFileName + ":\n\\\\");
         //
