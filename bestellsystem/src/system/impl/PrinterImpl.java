@@ -21,6 +21,7 @@ class PrinterImpl implements Printer {
         this.calc = calculator;
         totalAllOrders = 0;
         totalVAT = 0;
+        customerCount = new HashMap<>();
     }
 
     @Override
@@ -86,7 +87,7 @@ class PrinterImpl implements Printer {
     String getOrderSuffix(Order order) {
         int count = 1;
         long id = order.getCustomer().getId();
-        count += customerCount.containsKey(id) ? customerCount.get(id) : 0;
+        count += customerCount.getOrDefault(id, 0);
         customerCount.put(id, count);
         String s = order.getCustomer().getFirstName() + "'s ";
         switch (count) {

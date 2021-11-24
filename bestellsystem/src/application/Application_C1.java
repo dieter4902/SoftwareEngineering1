@@ -1,6 +1,7 @@
 package application;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import datamodel.*;
@@ -30,6 +31,7 @@ public class Application_C1 {
      */
     final List<Order> orders;
 
+    HashMap<Long, Integer> customerCount;
 
     /**
      * Default constructor to initialize Article and Order objects,
@@ -37,6 +39,7 @@ public class Application_C1 {
      */
     Application_C1() {
 
+        customerCount = new HashMap<>();
         // inherit Customers from base class
         Customer eric = new Customer("Eric Meyer")
                 .setId(892474)    // set id, first time
@@ -235,11 +238,9 @@ public class Application_C1 {
 
     String getOrderSuffix(Order order) {
         int count = 1;
-        for (Order o : orders.subList(0, orders.indexOf(order))) { //macht eine liste von den vorherabgelaufenen orders, der aktuellen order nicht inbegriffen
-            if (o.getCustomer().equals(order.getCustomer())) {
-                count++;
-            }
-        }
+        long id = order.getCustomer().getId();
+        count += customerCount.getOrDefault(id, 0);
+        customerCount.put(id, count);
         String s = order.getCustomer().getFirstName() + "'s ";
         switch (count) {
             case 0, 1://do nothing
