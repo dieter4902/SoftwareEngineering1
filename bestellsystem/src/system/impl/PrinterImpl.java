@@ -16,17 +16,20 @@ class PrinterImpl implements Printer {
     private long totalVAT;
     Formatter.OrderTableFormatter otfmt;
     HashMap<Long, Integer> customerCount;
+    Formatter formatter;
 
     public PrinterImpl(Calculator calculator) {
         this.calc = calculator;
         totalAllOrders = 0;
         totalVAT = 0;
         customerCount = new HashMap<>();
+        formatter = createFormatter();
     }
 
     @Override
     public StringBuffer printOrders(Iterable<Order> orders) {
-        otfmt = new OrderTableFormatterImpl(createFormatter(), new Object[][]{
+
+        otfmt = new OrderTableFormatterImpl(formatter, new Object[][]{
                 // five column table with column specs: width and alignment ('[' left, ']' right)
                 {12, '['}, {20, '['}, {36, '['}, {10, ']'}, {10, ']'}
         })
@@ -41,17 +44,12 @@ class PrinterImpl implements Printer {
         for (Order e : orders) {
             sb.append(printOrder(e));
         }
-
         otfmt.lineTotal(totalAllOrders, totalVAT, Currency.EUR);
-        return sb;
+        return sb.append(otfmt.getFormatter().getBuffer());
     }
 
     @Override
     public StringBuffer printOrder(Order order) {
-
-        StringBuffer sb = new StringBuffer();
-
-        long[] prices = new long[2];
         boolean flag = true;
         long price, vat, totalPrice = 0, totalVat = 0;
         for (OrderItem e : order.getItems()) {
@@ -75,7 +73,8 @@ class PrinterImpl implements Printer {
                 .liner("| | | | | |");
         totalAllOrders += totalPrice;
         totalVAT += totalVat;
-        return sb;
+
+        return otfmt.getFormatter().getBuffer();
 
     }
 
