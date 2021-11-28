@@ -14,21 +14,25 @@ class DataRepositoryImpl implements DataRepository {
     ArticleRepository aRep;
     OrderRepository oRep;
 
-    public DataRepositoryImpl() {
-        cRep = new CustomerRepositoryImpl();
-        aRep = new ArticleRepositoryImpl();
-        oRep = new OrderRepositoryImpl();
-    }
 
     public CustomerRepository getCustomerRepository() {
+        if (cRep == null) {
+            cRep = new CustomerRepositoryImpl();
+        }
         return cRep;
     }
 
     public ArticleRepository getArticleRepository() {
+        if (aRep == null) {
+            aRep = new ArticleRepositoryImpl();
+        }
         return aRep;
     }
 
     public OrderRepository getOrderRepository() {
+        if (oRep == null) {
+            oRep = new OrderRepositoryImpl();
+        }
         return oRep;
     }
 
