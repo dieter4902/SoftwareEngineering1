@@ -16,6 +16,7 @@ class PrinterImpl implements Printer {
     private long totalVAT;
     HashMap<Long, Integer> customerCount;
     Formatter formatter;
+    OrderTableFormatterImpl otfmt;
 
     public PrinterImpl(Calculator calculator) {
         this.calc = calculator;
@@ -28,8 +29,8 @@ class PrinterImpl implements Printer {
     @Override
     public StringBuffer printOrders(Iterable<Order> orders) {
 
-        Formatter.OrderTableFormatter otfmt = new OrderTableFormatterImpl(createFormatter(), new Object[][]{
-                // five column table with column specs: width and alignment ('[' left, ']' right)
+        otfmt = (OrderTableFormatterImpl) new OrderTableFormatterImpl(createFormatter(), new Object[][]{
+
                 {12, '['}, {20, '['}, {36, '['}, {10, ']'}, {10, ']'}
         })
                 .liner("+-+-+-+-+-+")        // print table header
@@ -38,28 +39,17 @@ class PrinterImpl implements Printer {
                 .liner("+-+-+-+-+-+")
                 .liner("||");
 
-
-        StringBuffer sb = new StringBuffer();
-        sb.append(otfmt.getFormatter().getBuffer());
         for (Order e : orders) {
-            sb.append(printOrder(e));
+            printOrder(e);
 
         }
-        otfmt = new OrderTableFormatterImpl(createFormatter(), new Object[][]{
-                // five column table with column specs: width and alignment ('[' left, ']' right)
-                {12, '['}, {20, '['}, {36, '['}, {10, ']'}, {10, ']'}
-        });
         otfmt.lineTotal(totalAllOrders, totalVAT, Currency.EUR);
-        return sb.append(otfmt.getFormatter().getBuffer());
+        return otfmt.getFormatter().getBuffer();
     }
 
     @Override
     public StringBuffer printOrder(Order order) {
 
-        Formatter.OrderTableFormatter otfmt = new OrderTableFormatterImpl(createFormatter(), new Object[][]{
-                // five column table with column specs: width and alignment ('[' left, ']' right)
-                {12, '['}, {20, '['}, {36, '['}, {10, ']'}, {10, ']'}
-        });
 
         boolean flag = true;
         long price, vat, totalPrice = 0, totalVat = 0;
