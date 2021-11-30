@@ -28,6 +28,7 @@ xcuserdata/
 # ignore JavaDoc directory
 doc
 
+output
 # ignore generated directories and compiled output
 bin
 out
@@ -57,5 +58,3 @@ target
 # ignore snippets package and files
 **/*[Ss]nipp*
 
-/out/
-/doc/
