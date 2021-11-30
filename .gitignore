@@ -37,8 +37,7 @@ target
 
 # ignore Java packaging files
 *.jar
-*.war
-*.nar
+*.war*.nar
 *.ear
 
 # ignore log files
