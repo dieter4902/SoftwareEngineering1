@@ -7,6 +7,9 @@ import system.Calculator;
 import system.Formatter;
 import system.Printer;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 
 class PrinterImpl implements Printer {
@@ -25,6 +28,7 @@ class PrinterImpl implements Printer {
         customerCount = new HashMap<>();
         formatter = createFormatter();
     }
+
 
     @Override
     public StringBuffer printOrders(Iterable<Order> orders) {
@@ -81,6 +85,14 @@ class PrinterImpl implements Printer {
     @Override
     public Formatter createFormatter() {
         return new FormatterImpl();
+    }
+
+    @Override
+    public void printOrdersToFile(Iterable<Order> orders, String filepath) throws IOException {
+        String data = printOrders(orders).toString();
+        FileWriter fileWriter = new FileWriter(filepath);
+        fileWriter.write(data);
+        fileWriter.close();
     }
 
     String getOrderSuffix(Order order) {

@@ -23,5 +23,5 @@ class package_info {
     /**
      * The Version.
      */
-    static final String Version = "0.1.0";
+    static final String Version = "0.1.1";
 }
