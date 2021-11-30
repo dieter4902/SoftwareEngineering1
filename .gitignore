@@ -58,5 +58,5 @@ target
 # ignore snippets package and files
 **/*[Ss]nipp*
 
-/out/
-/doc/
+out
+doc
