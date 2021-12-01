@@ -64,10 +64,6 @@ public class Application_E12 {
                     ", reason: " + e.getMessage());
         }
 
-        StringBuffer sb = runtime.getPrinter().printOrders(orders);
-
-        System.out.println(sb.toString());
-
         runtime.shutdown(rt -> {
             System.out.println("...shutting down.");
         });
