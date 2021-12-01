@@ -90,6 +90,8 @@ class PrinterImpl implements Printer {
     @Override
     public void printOrdersToFile(Iterable<Order> orders, String filepath) throws IOException {
         String data = printOrders(orders).toString();
+        File file = new File(filepath);
+        file.getParentFile().mkdirs();
         FileWriter fileWriter = new FileWriter(filepath);
         fileWriter.write(data);
         fileWriter.close();
