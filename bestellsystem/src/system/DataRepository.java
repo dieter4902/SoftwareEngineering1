@@ -15,6 +15,15 @@ import datamodel.Order;
 
 public interface DataRepository {
 
+	interface Repository<T> {
+		Optional<T> findById(long id);
+		Optional<T> findById(String id);
+		Iterable<Optional<T>> findAll();
+		long count();
+		Optional<T> save(Optional<T> entity);
+	}
+
+
 	/**
 	 * Public interface of the Customer repository.
 	 *
