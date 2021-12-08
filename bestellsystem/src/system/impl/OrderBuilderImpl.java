@@ -1,5 +1,6 @@
 package system.impl;
 
+import system.InventoryManager;
 import system.OrderBuilder;
 import system.RTE.Runtime;
 import system.DataRepository.CustomerRepository;
@@ -34,6 +35,8 @@ public class OrderBuilderImpl implements OrderBuilder {
     //
     private final OrderRepository orderRepository;
 
+    private final InventoryManager inventoryManager;
+
 
     /**
      * Provide access to RTE OrderBuilder singleton instance (singleton pattern).
@@ -59,6 +62,7 @@ public class OrderBuilderImpl implements OrderBuilder {
         this.customerRepository = runtime.getCustomerRepository();
         this.articleRepository = runtime.getArticleRepository();
         this.orderRepository = runtime.getOrderRepository();
+        this.inventoryManager = runtime.getInventoryManager();
     }
 
 
@@ -69,10 +73,15 @@ public class OrderBuilderImpl implements OrderBuilder {
      * @return chainable self-reference
      */
     public boolean accept(Order order) {
-        // TODO: validate order
-        boolean valid = true;
+        boolean validOrder = inventoryManager.isFillable(order);
+        if (validOrder) {
+            orderRepository.save(order);
+        }
+        return validOrder;
+
+        /*boolean valid = true;
         orderRepository.save(order);
-        return valid;
+        return valid;*/
     }
 
 

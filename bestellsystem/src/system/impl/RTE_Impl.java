@@ -5,10 +5,7 @@ import java.util.Properties;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import system.Calculator;
-import system.OrderBuilder;
-import system.Printer;
-import system.RTE;
+import system.*;
 import system.DataRepository.ArticleRepository;
 import system.DataRepository.CustomerRepository;
 import system.DataRepository.OrderRepository;
@@ -223,6 +220,11 @@ class RTE_Impl implements RTE {
         @Override
         public OrderBuilder getOrderBuilder() {
             return OrderBuilderImpl.getInstance(this);
+        }
+
+        @Override
+        public InventoryManager getInventoryManager() {
+            return null;
         }
 
 
