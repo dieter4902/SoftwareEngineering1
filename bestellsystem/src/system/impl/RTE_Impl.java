@@ -125,6 +125,9 @@ class RTE_Impl implements RTE {
         private final DataRepositoryImpl dataRepositoryImpl = new DataRepositoryImpl();
 
 
+        private final InventoryManager inventoryManager = new InventoryManagerMOCK();
+
+
         /**
          * Private constructor.
          *
@@ -224,7 +227,7 @@ class RTE_Impl implements RTE {
 
         @Override
         public InventoryManager getInventoryManager() {
-            return null;
+            return inventoryManager;
         }
 
 
