@@ -21,7 +21,7 @@ class InventoryManagerImpl implements InventoryManager {
     /**
      * internal data structure to manage inventory (unitsInStore) for Article-id's.
      */
-    private final HashMap<String, Integer> inventory = new HashMap<String, Integer>();
+    private final HashMap<String, Integer> inventory = new HashMap<>();
 
     public InventoryManagerImpl(ArticleRepository articleRepository) {
         this.articleRepository = articleRepository;
@@ -36,17 +36,17 @@ class InventoryManagerImpl implements InventoryManager {
 
     @Override
     public Optional<Article> findById(String id) {
-        return Optional.empty();
+        return articleRepository.findById(id);
     }
 
     @Override
     public Iterable<Article> findAll() {
-        return null;
+        return articleRepository.findAll();
     }
 
     @Override
     public long count() {
-        return 0;
+        return articleRepository.count();
     }
 
     /**
@@ -67,28 +67,30 @@ class InventoryManagerImpl implements InventoryManager {
         articleRepository.save(article);    // save, make sure to avoid duplicates
         //
         if (!inventory.containsKey(id)) {
-            this.inventory.put(id, Integer.valueOf(0));
+            this.inventory.put(id, 0);
         }
         return article;
     }
 
     @Override
     public int getUnitsInStock(String id) {
-        return 0;
+        return inventory.get(id).intValue();
     }
 
     @Override
     public void update(String id, int updatedUnitsInStock) {
-
+        inventory.put(id, updatedUnitsInStock);
     }
 
     @Override
     public boolean isFillable(Order order) {
+        //TODO
         return false;
     }
 
     @Override
     public boolean fill(Order order) {
+        //TODO
         return false;
     }
 
@@ -141,6 +143,7 @@ class InventoryManagerImpl implements InventoryManager {
 
     @Override
     public StringBuffer printInventory(int sortedBy, boolean decending, Integer... limit) {
+        //TODO
         return null;
     }
 }
