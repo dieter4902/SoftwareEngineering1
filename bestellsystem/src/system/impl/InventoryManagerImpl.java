@@ -83,9 +83,22 @@ class InventoryManagerImpl implements InventoryManager {
         inventory.put(id, updatedUnitsInStock);
     }
 
+
+    /**
+     * Test that order is fillable.
+     * <p>
+     * An order is fillable when all order items meet the condition:
+     * {@code orderItem.unitsOrdered <= inventory(article).unitsInStock}.
+     *
+     * @param order to validate.
+     * @return true if order is fillable from current inventory.
+     * @throws IllegalArgumentException if order is null.
+     */
     @Override
     public boolean isFillable(Order order) {
-        //TODO
+        if (order == null) {
+            throw new IllegalArgumentException("order is null?!");
+        }
         for (OrderItem e : order.getItems()) {
             if (getUnitsInStock(e.getArticle().getId()) < e.getUnitsOrdered()) {
                 return false;
@@ -94,10 +107,27 @@ class InventoryManagerImpl implements InventoryManager {
         return true;
     }
 
+
+    /**
+     * Fills order by deducting all order items from the inventory, if the
+     * order is fillable. If the order is not fillable, inventory remains
+     * unchanged (transactional behavior: all or none order item is filled).
+     *
+     * @param order to fill.
+     * @return true if order has been filled, false otherwise.
+     * @throws IllegalArgumentException if order is null.
+     */
     @Override
     public boolean fill(Order order) {
-        //TODO
-        return false;
+        if (isFillable(order)) {
+            for (OrderItem e : order.getItems()) {
+                String id = e.getArticle().getId();
+                update(id, getUnitsInStock(id) - e.getUnitsOrdered());
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
