@@ -8,8 +8,7 @@ import system.DataRepository.ArticleRepository;
 import system.Formatter;
 import system.InventoryManager;
 
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -138,7 +137,8 @@ class InventoryManagerImpl implements InventoryManager {
      */
     @Override
     public StringBuffer printInventory() {
-        return printInventory(StreamSupport.stream(articleRepository.findAll().spliterator(), false));
+        return printInventory(1, true, 6);
+        //return printInventory(StreamSupport.stream(articleRepository.findAll().spliterator(), false));
     }
 
     private StringBuffer printInventory(Stream<Article> articleStream) {
@@ -176,10 +176,37 @@ class InventoryManagerImpl implements InventoryManager {
         return tfmt.getFormatter().getBuffer();
     }
 
-
+    /**
+     * Print inventory as table with sorting and limiting criteria.
+     *
+     * @param sortedBy  sorting criteria 1: byPrice; 2: byValue; 3: byUnits;
+     *                  4: byDescription; 5: bySKU; else: unsorted
+     * @param decending true if in descending order
+     * @param limit     upper boundary of articles printed after sorting
+     * @return printed inventory (as table).
+     */
     @Override
     public StringBuffer printInventory(int sortedBy, boolean decending, Integer... limit) {
-        //TODO
-        return null;
+        Stream<Article> articleStream = StreamSupport.stream(articleRepository.findAll().spliterator(), false);
+        articleStream = switch (sortedBy) {
+            case 1 -> articleStream.sorted(Comparator.comparingLong(Article::getUnitPrice));
+            case 2 -> articleStream.sorted(Comparator.comparingLong(o -> inventory.get(o.getId()) * o.getUnitPrice()));
+            case 3 -> articleStream.sorted(Comparator.comparingLong(o -> inventory.get(o.getId())));
+            case 4 -> articleStream.sorted(Comparator.comparing(Article::getDescription));
+            case 5 -> articleStream.sorted(Comparator.comparing(Article::getId));
+            default -> StreamSupport.stream(articleRepository.findAll().spliterator(), false);
+        };
+        if (decending) {
+            List<Article> aList = articleStream.toList();
+            List<Article> newAlist = new ArrayList<>();
+            for (int i = 0; i < aList.size(); i++) {
+                newAlist.add(aList.get(aList.size() - 1 - i));
+            }
+            articleStream = newAlist.stream();
+        }
+        if (limit.length > 0) {
+            articleStream = articleStream.limit(limit[0]);
+        }
+        return printInventory(articleStream);
     }
 }
