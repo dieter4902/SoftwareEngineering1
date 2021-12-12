@@ -3,6 +3,7 @@ package system.impl;
 import datamodel.Article;
 import datamodel.Currency;
 import datamodel.Order;
+import datamodel.OrderItem;
 import system.DataRepository.ArticleRepository;
 import system.Formatter;
 import system.InventoryManager;
@@ -85,7 +86,12 @@ class InventoryManagerImpl implements InventoryManager {
     @Override
     public boolean isFillable(Order order) {
         //TODO
-        return false;
+        for (OrderItem e : order.getItems()) {
+            if (getUnitsInStock(e.getArticle().getId()) < e.getUnitsOrdered()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
