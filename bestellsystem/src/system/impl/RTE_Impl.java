@@ -227,10 +227,7 @@ class RTE_Impl implements RTE {
 
         @Override
         public InventoryManager getInventoryManager() {
-            if (inventoryManager == null) {
-                inventoryManager = new InventoryManagerMOCK();
-            }
-            return inventoryManager;
+            return InventoryManagerMOCK.getInstance();
         }
 
 

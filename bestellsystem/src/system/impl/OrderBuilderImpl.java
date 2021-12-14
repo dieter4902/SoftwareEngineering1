@@ -78,10 +78,6 @@ public class OrderBuilderImpl implements OrderBuilder {
             orderRepository.save(order);
         }
         return validOrder;
-
-        /*boolean valid = true;
-        orderRepository.save(order);
-        return valid;*/
     }
 
 
