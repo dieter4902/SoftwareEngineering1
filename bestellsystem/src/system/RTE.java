@@ -14,7 +14,11 @@ import system.impl.InstanceAccessor;
  * The Run-Time Environment (RTE) allows to configure and launch Runtime
  * instances that offer public interfaces for all system components
  * through their public interfaces.
- *
+ * <<<<<<< HEAD
+ * <p>
+ * =======
+ * <p>
+ * >>>>>>> feat.732
  * Implementations are hidden as local (none-public) classes in the .impl
  * package.
  */
@@ -27,7 +31,7 @@ public interface RTE {
      *
      * @return reference to RTE singleton instance.
      */
-    static RTE getInstance() {
+    public static RTE getInstance() {
         return InstanceAccessor.getInstance();
     }
 
@@ -54,6 +58,7 @@ public interface RTE {
         String KEY_DATASOURCE_ORDER = "rte.datasource.orders";
         //
         String JSON_DATASOURCE = "JSON";
+
 
         /**
          * Store configuration Property as String key-value pair.
