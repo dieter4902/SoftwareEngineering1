@@ -17,5 +17,5 @@ class package_info {
     /**
      * The Version.
      */
-    static final String Version = "0.1.1 - feat.728: OrderBuilder system component";
+    static final String Version = "0.1.2";
 }
