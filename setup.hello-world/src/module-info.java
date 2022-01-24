@@ -1,2 +1,0 @@
-module setup.hello.world {
-}

@@ -58,3 +58,4 @@ target
 # ignore snippets package and files
 **/*[Ss]nipp*
 
+/SoftwareEngineering1.iml
